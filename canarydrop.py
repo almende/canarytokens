@@ -7,7 +7,7 @@ Maps to the object stored in Redis.
 
 import datetime
 import random
-import md5
+from hashlib import md5
 import os
 import base64
 import pyqrcode

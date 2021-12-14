@@ -7,7 +7,6 @@ import copy
 import yaml
 import random
 import base64
-import settings
 
 UnauthorizedResponseBody = {"kind":"Status","apiVersion":"v1","metadata":{},"status":"Failure","message":"Unauthorized","reason":"Unauthorized","code":401}
 BadRequestResponseBody = {"kind":"Status","apiVersion":"v1","metadata":{},"status":"Failure","message":"Bad Request","reason":"Bad Request","code":400}
@@ -55,7 +54,7 @@ class KubeConfig():
 
             _ca_data = get_certificate(self.ca_cert_path)
             if not _ca_data:
-                print "Client CA was not found, kubeconfig generation failed"
+                print("Client CA was not found, kubeconfig generation failed")
                 return None
 
             ca_data = _ca_data.get('c')

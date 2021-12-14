@@ -1,7 +1,5 @@
 import zlib
-from cStringIO import StringIO
 import re
-import sys
 import random
 
 import settings

@@ -5,7 +5,9 @@ from os import unlink, close
 from zipfile import ZipFile, ZipInfo
 
 def printzip(zip):
-    print '\t{extattr:b}\t{extattr:02x}\t{intattr:b}\t-\t{name}'.format(extattr=zip.external_attr,intattr=zip.internal_attr,name=zip.filename)
+    print('\t{extattr:b}\t{extattr:02x}\t{intattr:b}\t-\t{name}'.format(extattr=zip.external_attr,
+                                                                        intattr=zip.internal_attr, name=zip.filename))
+
 
 MODE_READONLY  = 0x01
 MODE_HIDDEN    = 0x02

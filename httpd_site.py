@@ -39,14 +39,13 @@ import datetime
 import tempfile
 import hashlib
 import os
-from cStringIO import StringIO
 import csv
 import wireguard as wg
 
 env = Environment(loader=FileSystemLoader('templates'),
                   extensions=['jinja2.ext.loopcontrols'])
 
-with open('/srv/templates/error_http.html', 'r') as f:
+with open('{}/error_http.html'.format(settings.TEMPLATE_DIR), 'r') as f:
     twisted.web.resource.ErrorPage.template = f.read()
 
 class GeneratorPage(resource.Resource):
@@ -711,7 +710,7 @@ class CanarytokensHttpd():
         root.putChild("history", HistoryPage())
         root.putChild("resources", LimitedFile("/srv/templates/static"))
 
-        with open('/srv/templates/robots.txt', 'r') as f:
+        with open('{}/robots.txt'.format(settings.TEMPLATE_DIR), 'r') as f:
             root.putChild("robots.txt", Data(f.read(), "text/plain"))
 
         wrapped = EncodingResourceWrapper(root, [GzipEncoderFactory()])

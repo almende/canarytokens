@@ -1,8 +1,6 @@
 import requests
 import datetime
 import simplejson
-import urllib
-import base64
 import settings
 from exception import LinkedInFailure
 from redismanager import db, KEY_CANARYDROP, KEY_CANARY_DOMAINS,\
@@ -211,7 +209,7 @@ def get_aws_keys(token=None, server=None):
 
 def validate_hostname(hostname):
     import re
-    print 'Going to search {e} for bad username characters'.format(e=hostname)
+    print('Going to search {e} for bad username characters'.format(e=hostname))
     pattern = re.compile("[^a-zA-Z0-9+=,.@_-]")
     match = pattern.search(hostname)
     if match:

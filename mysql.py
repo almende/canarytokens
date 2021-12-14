@@ -6,7 +6,6 @@ import base64
 import gzip
 from zipfile import ZipFile, ZipInfo
 from ziplib import MODE_DIRECTORY
-from cStringIO import StringIO
 import random
 
 from settings import CANARY_MYSQL_DUMP_TEMPLATE

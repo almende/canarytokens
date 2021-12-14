@@ -13,7 +13,7 @@ class CanaryMessageDelivery:
     implements(smtp.IMessageDelivery)
 
     def __init__(self):
-        print 'Created CanaryMessageDelivery()'
+        print('Created CanaryMessageDelivery()')
 
     def receivedHeader(self, helo, origin, recipients):
         return "Received: CanaryMessageDelivery"
@@ -70,10 +70,10 @@ class CanaryMessage:
                 self.stored_byte_count ++ len(line)
 
     def eomReceived(self):
-        print "New message received:"
-        print "\n".join(self.headers)
-        print "\n".join(self.links)
-        print '\n\n'.join([ '\n'.join(x) for x in self.attachments])
+        print("New message received:")
+        print("\n".join(self.headers))
+        print("\n".join(self.links))
+        print('\n\n'.join([ '\n'.join(x) for x in self.attachments]))
         self.lines = None
         #return defer.succeed(None)
         d = defer.Deferred()

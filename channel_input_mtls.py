@@ -182,7 +182,7 @@ class mTLS(basic.LineReceiver):
             return {"f": mTLS._get_digest(dump_certificate(FILETYPE_PEM, x509)), "c": b64_cert, "k": b64_key}
 
         except Exception as e:
-            print "Exception: {}".format(e)
+            print("Exception: {}".format(e))
             return None
 
     @staticmethod
