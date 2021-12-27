@@ -1,8 +1,13 @@
-import redis
+import redis, fakeredis
 
 import settings
 
-db = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB, socket_timeout=10)
+if settings.TEST_REDIS:
+    db = fakeredis.FakeStrictRedis(decode_responses=True)
+else:
+    db = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB, socket_timeout=10,
+                           decode_responses=True)
+
 try:
     db.ping()
 except Exception as e:

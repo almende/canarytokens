@@ -1,13 +1,11 @@
 from queries import *
 import settings
 
-
 domains = settings.DOMAINS
 nxdomains = settings.NXDOMAINS
 google_api_key = settings.GOOGLE_API_KEY
-path_elements = ['about','feedback','static','terms','articles','images',\
-                 'tags','traffic']
-pages = ['index.html','contact.php','post.jsp','submit.aspx']
+path_elements = ['about', 'feedback', 'static', 'terms', 'articles', 'images', 'tags', 'traffic']
+pages = ['index.html', 'contact.php', 'post.jsp', 'submit.aspx']
 
 print('[x] Adding domains')
 for d in domains:
