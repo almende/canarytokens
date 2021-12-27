@@ -115,7 +115,7 @@ class CanarytokenPage(resource.Resource, InputChannel):
                 canarydrop._drop['hit_time'] = datetime.datetime.utcnow().strftime("%s.%f")
                 useragent = request.args.get('user_agent', [None])[0]
                 src_ip    = request.args.get('ip', [None])[0]
-                additional_info = {'Slack Log Data': {k:v for k,v in request.args.iteritems() if k not in ['user_agent', 'ip']}}
+                additional_info = {'Slack Log Data': {k:v for k,v in request.args.items() if k not in ['user_agent', 'ip']}}
                 self.dispatch(canarydrop=canarydrop, src_ip=src_ip, useragent=useragent, additional_info=additional_info)
                 return self.GIF
 
@@ -123,7 +123,7 @@ class CanarytokenPage(resource.Resource, InputChannel):
                 canarydrop._drop['hit_time'] = datetime.datetime.utcnow().strftime("%s.%f")
                 useragent = request.args.get('user_agent', [None])[0]
                 src_ip    = request.args.get('ip', [None])[0]
-                additional_info = {'AWS Key Log Data': {k:v for k,v in request.args.iteritems() if k not in ['user_agent', 'ip']}}
+                additional_info = {'AWS Key Log Data': {k:v for k,v in request.args.items() if k not in ['user_agent', 'ip']}}
                 self.dispatch(canarydrop=canarydrop, src_ip=src_ip, useragent=useragent, additional_info=additional_info)
                 return self.GIF
 
@@ -133,7 +133,7 @@ class CanarytokenPage(resource.Resource, InputChannel):
                     try:
                         canarydrop._drop['hit_time'] = datetime.datetime.utcnow().strftime("%s.%f")
                         src_ip    = request.args['RemoteIP'][0]
-                        additional_info = {'AWS Log Data': {k:v for k,v in request.args.iteritems() if k not in ['key','src_ip']}}
+                        additional_info = {'AWS Log Data': {k:v for k,v in request.args.items() if k not in ['key','src_ip']}}
                         self.dispatch(canarydrop=canarydrop, src_ip=src_ip,
                                       additional_info=additional_info)
                     except Exception as e:
@@ -172,7 +172,7 @@ class CanarytokenPage(resource.Resource, InputChannel):
                     except Exception as e:
                         log.error('Error in secretkeeper_photo post: {error}'.format(error=e))
                 else:
-                    additional_info = {k:v for k,v in request.args.iteritems() if k not in ['key','canarytoken','name']}
+                    additional_info = {k:v for k,v in request.args.items() if k not in ['key','canarytoken','name']}
                     canarydrop.add_additional_info_to_hit(hit_time=key,additional_info={request.args['name'][0]:additional_info})
                 return 'success'
             else:

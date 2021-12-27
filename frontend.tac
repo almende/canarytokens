@@ -1,13 +1,11 @@
-import sys, os
 import logging
+import os
+import sys
+
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-from twisted.names import server
-from twisted.application import service, internet
+from twisted.application import service
 
 from httpd_site import CanarytokensHttpd
-from switchboard import Switchboard
-
-import setup_db
 
 from twisted.logger import ILogObserver, textFileLogObserver
 from twisted.python import logfile
@@ -21,9 +19,9 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 logger.debug('Canarydrops generator HTTPd')
 
 application = service.Application("Canarydrops Generator Web Server")
-f = logfile.LogFile.fromFullPath(settings.LOG_FILE, rotateLength=settings.FRONTEND_LOG_SIZE,
-                                 maxRotatedFiles=settings.FRONTEND_LOG_COUNT)
-application.setComponent(ILogObserver, textFileLogObserver(f))
+# f = logfile.LogFile.fromFullPath(settings.LOG_FILE, rotateLength=settings.FRONTEND_LOG_SIZE,
+#                                  maxRotatedFiles=settings.FRONTEND_LOG_COUNT)
+# application.setComponent(ILogObserver, textFileLogObserver(f))
 
 canarytokens_httpd = CanarytokensHttpd(port=settings.CANARYTOKENS_HTTP_PORT)
 canarytokens_httpd.service.setServiceParent(application)
