@@ -66,6 +66,13 @@ class GeneratorPage(resource.Resource):
 
     def render_POST(self, request):
         request.responseHeaders.addRawHeader(b"content-type", b"application/json")
+
+        if request.uri.startswith(b'/generate'):
+            request.args = {
+                k.decode('utf-8'): [v[0].decode('utf-8')]
+                for k, v in request.args.items()
+            }
+
         response = {'Error': None,
                     'Error_Message': None,
                     'Url': "",
@@ -153,7 +160,7 @@ class GeneratorPage(resource.Resource):
 
             if settings.TWILIO_ENABLED:
                 try:
-                    if not request.args[b'mobile'][0]:
+                    if not request.args['mobile'][0]:
                         raise KeyError
 
                     canarydrop['alert_sms_recipient'] = request.args['mobile'][0]
@@ -175,7 +182,7 @@ class GeneratorPage(resource.Resource):
             save_canarydrop(canarydrop)
 
             try:
-                clonedsite = request.args[b'clonedsite'][0]
+                clonedsite = request.args['clonedsite'][0]
                 if not clonedsite:
                     raise KeyError
 
@@ -190,14 +197,14 @@ class GeneratorPage(resource.Resource):
                 pass
 
             try:
-                if not request.args.get(b'type', None)[0] == 'qr_code':
+                if not request.args.get('type', None)[0] == 'qr_code':
                     raise Exception()
                 response['qrcode_png'] = canarydrop.get_qrcode_data_uri_png()
             except:
                 pass
 
             try:
-                if not request.args.get(b'type', None)[0] == 'aws_keys':
+                if not request.args.get('type', None)[0] == 'aws_keys':
                     raise Exception()
                 keys = get_aws_keys(token=canarytoken.value(), server=get_all_canary_domains()[0])
                 if not keys:
@@ -217,7 +224,7 @@ class GeneratorPage(resource.Resource):
                 pass
 
             try:
-                if not request.args.get(b'type', None)[0] == 'kubeconfig':
+                if not request.args.get('type', None)[0] == 'kubeconfig':
                     raise Exception()
                 if kubeconfig is None:
                     response['Error'] = 4
@@ -231,7 +238,7 @@ class GeneratorPage(resource.Resource):
                 pass
 
             try:
-                if not request.args.get(b'type', None)[0] == 'web_image':
+                if not request.args.get('type', None)[0] == 'web_image':
                     raise Exception()
 
                 if not settings.WEB_IMAGE_UPLOAD_PATH:
@@ -282,7 +289,7 @@ class GeneratorPage(resource.Resource):
                 pass
 
             try:
-                if request.args.get(b'type', None)[0] != 'signed_exe':
+                if request.args.get('type', None)[0] != 'signed_exe':
                     raise Exception()
 
                 fields = cgi.FieldStorage(
@@ -316,7 +323,7 @@ class GeneratorPage(resource.Resource):
                 pass
 
             try:
-                if request.args.get(b'type', None)[0] != 'fast_redirect':
+                if request.args.get('type', None)[0] != 'fast_redirect':
                     raise Exception()
 
                 if not request.args[b'redirect_url'][0]:
@@ -328,13 +335,13 @@ class GeneratorPage(resource.Resource):
                 pass
 
             try:
-                if request.args.get(b'type', None)[0] != 'slow_redirect':
+                if request.args.get('type', None)[0] != 'slow_redirect':
                     raise Exception()
 
-                if not request.args[b'redirect_url'][0]:
+                if not request.args['redirect_url'][0]:
                     raise Exception()
 
-                canarydrop['redirect_url'] = request.args[b'redirect_url'][0]
+                canarydrop['redirect_url'] = request.args['redirect_url'][0]
                 save_canarydrop(canarydrop)
             except:
                 pass
@@ -350,7 +357,13 @@ class GeneratorPage(resource.Resource):
                 response['Error'] = 255
                 log.error('Unexpected error: {err}'.format(err=e))
 
-        return simplejson.dumps(response)
+        if request.uri == b'/generate':
+            request.args = {
+                k.encode('utf-8'): [v[0].encode('utf-8')]
+                for k, v in request.args.items()
+            }
+
+        return simplejson.dumps(response).encode('utf-8')
 
 
 class DownloadPage(resource.Resource):
