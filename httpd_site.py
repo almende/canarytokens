@@ -67,11 +67,15 @@ class GeneratorPage(resource.Resource):
     def render_POST(self, request):
         request.responseHeaders.addRawHeader(b"content-type", b"application/json")
 
-        if request.uri.startswith(b'/generate'):
-            request.args = {
-                k.decode('utf-8'): [v[0].decode('utf-8')]
-                for k, v in request.args.items()
-            }
+        request.args = {
+            (k.decode('utf-8') if type(k) == bytes else k): [v[0].decode('utf-8') if (k not in [b'web_image', 'web_image'] and type(v[0]) == bytes) else v[0]]
+            for k, v in request.args.items()
+        }
+
+        headers = {
+            (k.decode('utf-8') if type(k) == bytes else k): v.decode('utf-8') if type(v) == bytes else v
+            for k, v in request.getAllHeaders().items()
+        }
 
         response = {'Error': None,
                     'Error_Message': None,
@@ -246,9 +250,9 @@ class GeneratorPage(resource.Resource):
 
                 fields = cgi.FieldStorage(
                     fp=request.content,
-                    headers=request.getAllHeaders(),
+                    headers=headers,
                     environ={'REQUEST_METHOD': 'POST',
-                             'CONTENT_TYPE': request.getAllHeaders()['content-type'],
+                             'CONTENT_TYPE': headers['content-type'],
                              }
                 )
 
@@ -279,7 +283,7 @@ class GeneratorPage(resource.Resource):
                         if exc.errno != errno.EEXIST:
                             raise
 
-                with open(filepath, "w") as f:
+                with open(filepath, "wb") as f:
                     f.write(filebody)
 
                 canarydrop['web_image_enabled'] = True
@@ -294,9 +298,9 @@ class GeneratorPage(resource.Resource):
 
                 fields = cgi.FieldStorage(
                     fp=request.content,
-                    headers=request.getAllHeaders(),
+                    headers=headers,
                     environ={'REQUEST_METHOD': 'POST',
-                             'CONTENT_TYPE': request.getAllHeaders()['content-type'],
+                             'CONTENT_TYPE': headers['content-type'],
                              }
                 )  # hacky way to parse out file contents and filenames
                 filename = fields['signed_exe'].filename
@@ -356,12 +360,6 @@ class GeneratorPage(resource.Resource):
             if response['Error'] is None:
                 response['Error'] = 255
                 log.error('Unexpected error: {err}'.format(err=e))
-
-        if request.uri == b'/generate':
-            request.args = {
-                k.encode('utf-8'): [v[0].encode('utf-8')]
-                for k, v in request.args.items()
-            }
 
         return simplejson.dumps(response).encode('utf-8')
 
