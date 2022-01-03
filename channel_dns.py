@@ -15,7 +15,7 @@ import settings
 import math
 import base64
 import re
-from exceptions import UnicodeDecodeError
+from builtins import UnicodeDecodeError
 
 class DNSServerFactory(server.DNSServerFactory, object):
     def handleQuery(self, message, protocol, address):

@@ -42,53 +42,53 @@ if getattr(settings, 'ERROR_LOG_WEBHOOK', None):
 
 switchboard = Switchboard()
 
-email_output_channel  = EmailOutputChannel(switchboard=switchboard)
-twilio_output_channel = TwilioOutputChannel(switchboard=switchboard)
-webhook_output_channel = WebhookOutputChannel(switchboard=switchboard)
+# email_output_channel  = EmailOutputChannel(switchboard=switchboard)
+# twilio_output_channel = TwilioOutputChannel(switchboard=switchboard)
+# webhook_output_channel = WebhookOutputChannel(switchboard=switchboard)
 
-dns_service = service.MultiService()
-
-factory = DNSServerFactory(
-    clients=[ChannelDNS(listen_domain=settings.LISTEN_DOMAIN,
-                        switchboard=switchboard)]
-)
-udp_factory = dns.DNSDatagramProtocol(factory)
-internet.TCPServer(settings.CHANNEL_DNS_PORT, factory)\
-            .setServiceParent(dns_service)
-internet.UDPServer(settings.CHANNEL_DNS_PORT, udp_factory)\
-            .setServiceParent(dns_service)
-dns_service.setServiceParent(application)
+# dns_service = service.MultiService()
+#
+# factory = DNSServerFactory(
+#     clients=[ChannelDNS(listen_domain=settings.LISTEN_DOMAIN,
+#                         switchboard=switchboard)]
+# )
+# udp_factory = dns.DNSDatagramProtocol(factory)
+# internet.TCPServer(settings.CHANNEL_DNS_PORT, factory)\
+#             .setServiceParent(dns_service)
+# internet.UDPServer(settings.CHANNEL_DNS_PORT, udp_factory)\
+#             .setServiceParent(dns_service)
+# dns_service.setServiceParent(application)
 
 canarytokens_httpd = ChannelHTTP(port=settings.CHANNEL_HTTP_PORT,
                                 switchboard=switchboard)
 canarytokens_httpd.service.setServiceParent(application)
 
-canarytokens_imgur = ChannelImgur(min_delay=settings.CHANNEL_IMGUR_MIN_DELAY,
-                                 switchboard=switchboard)
-canarytokens_imgur.service.setServiceParent(application)
+# canarytokens_imgur = ChannelImgur(min_delay=settings.CHANNEL_IMGUR_MIN_DELAY,
+#                                  switchboard=switchboard)
+# canarytokens_imgur.service.setServiceParent(application)
+#
+# canarytokens_linkedin = ChannelLinkedIn(min_delay=settings.CHANNEL_LINKEDIN_MIN_DELAY,
+#                                  switchboard=switchboard)
+# canarytokens_linkedin.service.setServiceParent(application)
+#
+# canarytokens_bitcoin = ChannelBitcoin(min_delay=settings.CHANNEL_BITCOIN_MIN_DELAY,
+#                                  switchboard=switchboard)
+# canarytokens_bitcoin.service.setServiceParent(application)
+#
+# canarytokens_smtp = ChannelSMTP(port=settings.CHANNEL_SMTP_PORT,
+#                                  switchboard=switchboard)
+# canarytokens_smtp.service.setServiceParent(application)
 
-canarytokens_linkedin = ChannelLinkedIn(min_delay=settings.CHANNEL_LINKEDIN_MIN_DELAY,
-                                 switchboard=switchboard)
-canarytokens_linkedin.service.setServiceParent(application)
+# canarytokens_kubeconfig=ChannelKubeConfig(port=settings.CHANNEL_MTLS_KUBECONFIG_PORT, ip=settings.PUBLIC_IP,
+#                                 switchboard=switchboard)
+# canarytokens_kubeconfig.service.setServiceParent(application)
 
-canarytokens_bitcoin = ChannelBitcoin(min_delay=settings.CHANNEL_BITCOIN_MIN_DELAY,
-                                 switchboard=switchboard)
-canarytokens_bitcoin.service.setServiceParent(application)
-
-canarytokens_smtp = ChannelSMTP(port=settings.CHANNEL_SMTP_PORT,
-                                 switchboard=switchboard)
-canarytokens_smtp.service.setServiceParent(application)
-
-canarytokens_kubeconfig=ChannelKubeConfig(port=settings.CHANNEL_MTLS_KUBECONFIG_PORT, ip=settings.PUBLIC_IP,
-                                switchboard=switchboard)
-canarytokens_kubeconfig.service.setServiceParent(application)
-
-canarytokens_mysql = ChannelMySQL(port=settings.CHANNEL_MYSQL_PORT,
-                                 switchboard=switchboard)
-canarytokens_mysql.service.setServiceParent(application)
-
-canarytokens_wireguard = ChannelWireGuard(switchboard=switchboard)
-canarytokens_wireguard.service.setServiceParent(application)
+# canarytokens_mysql = ChannelMySQL(port=settings.CHANNEL_MYSQL_PORT,
+#                                  switchboard=switchboard)
+# canarytokens_mysql.service.setServiceParent(application)
+#
+# canarytokens_wireguard = ChannelWireGuard(switchboard=switchboard)
+# canarytokens_wireguard.service.setServiceParent(application)
 
 #loop to update tor exit nodes every 30 min
 loop_http = internet.task.LoopingCall(update_tor_exit_nodes_loop)

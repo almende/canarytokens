@@ -13,7 +13,7 @@ from channel import OutputChannel
 from constants import OUTPUT_CHANNEL_EMAIL
 import sendgrid
 from sendgrid.helpers.mail import *
-from email.MIMEText import MIMEText
+from email.mime.text import MIMEText
 import smtplib
 
 try:
@@ -171,14 +171,16 @@ class EmailOutputChannel(OutputChannel):
             if settings.DEBUG:
                 pprint.pprint(message)
             else:
-                result = mandrill_client.messages.send(message=message,
-                                                   async=False,
-                                                   ip_pool='Main Pool')
+                result = mandrill_client.messages.send(
+                    message=message,
+                    send_async=False,
+                    ip_pool='Main Pool'
+                )
             log.info('Sent alert to {recipient} for token {token}'\
                         .format(recipient=canarydrop['alert_email_recipient'],
                                 token=canarydrop.canarytoken.value()))
 
-        except mandrill.Error, e:
+        except mandrill.Error as e:
             # Mandrill errors are thrown as exceptions
             log.error('A mandrill error occurred: %s - %s' % (e.__class__, e))
             # A mandrill error occurred: <class 'mandrill.UnknownSubaccountError'> - No subaccount exists with the id 'customer-123'....

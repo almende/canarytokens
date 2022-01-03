@@ -605,7 +605,7 @@ def update_tor_exit_nodes(contents):
 
 
 def update_tor_exit_nodes_loop():
-    d = getPage('https://check.torproject.org/exit-addresses')
+    d = getPage(b'https://check.torproject.org/exit-addresses')
     d.addCallback(update_tor_exit_nodes)
 
 

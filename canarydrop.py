@@ -64,27 +64,27 @@ class Canarydrop(object):
                 str(random.SystemRandom().randrange(1, 2 ** 128)).encode('utf-8')
             ).hexdigest()
 
-        if self._drop.get('browser_scanner_enabled', '') in ('True', True):
+        if self._drop.get('browser_scanner_enabled', '') in ('True', True, 1, '1'):
             self._drop['browser_scanner_enabled'] = True
         else:
             self._drop['browser_scanner_enabled'] = False
 
-        if self._drop.get('alert_email_enabled', '') in ('True', True):
+        if self._drop.get('alert_email_enabled', '') in ('True', True, 1, '1'):
             self._drop['alert_email_enabled'] = True
         else:
             self._drop['alert_email_enabled'] = False
 
-        if self._drop.get('alert_webhook_enabled', '') in ('True', True):
+        if self._drop.get('alert_webhook_enabled', '') in ('True', True, 1, '1'):
             self._drop['alert_webhook_enabled'] = True
         else:
             self._drop['alert_webhook_enabled'] = False
 
-        if self._drop.get('alert_sms_enabled', '') in ('True', True):
+        if self._drop.get('alert_sms_enabled', '') in ('True', True, 1, '1'):
             self._drop['alert_sms_enabled'] = True
         else:
             self._drop['alert_sms_enabled'] = False
 
-        if self._drop.get('web_image_enabled', '') in ('True', True):
+        if self._drop.get('web_image_enabled', '') in ('True', True, 1, '1'):
             self._drop['web_image_enabled'] = True
         else:
             self._drop['web_image_enabled'] = False

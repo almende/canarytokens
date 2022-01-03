@@ -1,12 +1,13 @@
 import re
 
-from zope.interface import implements
+from zope.interface import implements, implementer
 
 from twisted.internet import defer
 from twisted.mail import smtp
 from twisted.cred.portal import IRealm
 from twisted.cred.portal import Portal
 from twisted.logger import Logger
+
 log = Logger()
 from twisted.application import internet
 from twisted.application import service
@@ -19,9 +20,9 @@ from channel import InputChannel
 from queries import get_canarydrop
 
 
-
+@implementer(smtp.IMessageDelivery)
 class CanaryMessageDelivery:
-    implements(smtp.IMessageDelivery)
+    # implements(smtp.IMessageDelivery)
 
     def __init__(self):
         print('Created CanaryMessageDelivery()')
@@ -39,9 +40,8 @@ class CanaryMessageDelivery:
         raise smtp.SMTPBadRcpt(user)
 
 
-
+@implementer(smtp.IMessage)
 class CanaryMessage:
-    implements(smtp.IMessage)
 
     def __init__(self, esmtp=None):
         self.esmtp = esmtp
@@ -77,22 +77,22 @@ class CanaryMessage:
                     self.in_mime_header = True
                     self.attachments.append([])
 
-            if self.stored_byte_count < 5*2**20: #5MB limit
+            if self.stored_byte_count < 5 * 2 ** 20:  # 5MB limit
                 self.lines.append(line)
-                self.stored_byte_count ++ len(line)
+                self.stored_byte_count + + len(line)
 
     def eomReceived(self):
         print("New message received:")
         self.esmtp.mail['headers'] = self.headers
         print("\n".join(self.headers))
         self.esmtp.mail['links'] = self.links_re.findall(
-                                   '\r\n'.join(self.lines))
+            '\r\n'.join(self.lines))
         print("\n".join(self.links))
-        self.esmtp.mail['attachments'] = [ '\n'.join(x) for x in self.attachments]
-        print('\n\n'.join([ '\n'.join(x) for x in self.attachments]))
+        self.esmtp.mail['attachments'] = ['\n'.join(x) for x in self.attachments]
+        print('\n\n'.join(['\n'.join(x) for x in self.attachments]))
         self.lines = None
         self.esmtp.dispatch()
-        #return defer.succeed(None)
+        # return defer.succeed(None)
         d = defer.Deferred()
         d.callback("Success")
         return d
@@ -112,7 +112,7 @@ class CanaryESMTP(smtp.ESMTP):
                      'links': [],
                      'attachments': []}
 
-    def greeting(self,):
+    def greeting(self, ):
         self.src_ip = self.transport.getPeer().host
         try:
             return self.factory.responses['greeting']
@@ -137,16 +137,17 @@ class CanaryESMTP(smtp.ESMTP):
             self.canarydrop = Canarydrop(**get_canarydrop(canarytoken=token.value()))
             return lambda: CanaryMessage(esmtp=self)
         except (NoCanarytokenPresent, NoCanarytokenFound):
-            log.warn('No token in recipient address: {address}'\
+            log.warn('No token in recipient address: {address}' \
                      .format(address=user.dest.local))
         except Exception as e:
             log.error(e)
 
         raise smtp.SMTPBadRcpt(user)
 
-    def dispatch(self,):
+    def dispatch(self, ):
         self.factory.dispatch(canarydrop=self.canarydrop, src_ip=self.src_ip,
-                      mail=self.mail)
+                              mail=self.mail)
+
 
 class CanarySMTPFactory(smtp.SMTPFactory, InputChannel):
     protocol = CanaryESMTP
@@ -162,15 +163,15 @@ class CanarySMTPFactory(smtp.SMTPFactory, InputChannel):
 
     def buildProtocol(self, addr):
         p = smtp.SMTPFactory.buildProtocol(self, addr)
-#        p.delivery = self.delivery
-#        p.challengers = {"LOGIN": LOGINCredentials, "PLAIN": PLAINCredentials}
+        #        p.delivery = self.delivery
+        #        p.challengers = {"LOGIN": LOGINCredentials, "PLAIN": PLAINCredentials}
         return p
 
     def format_additional_data(self, **kwargs):
         log.info(kwargs)
-        if kwargs.has_key('src_ip') and kwargs['src_ip']:
+        if 'src_ip' in kwargs and kwargs['src_ip']:
             additional_report = 'Source IP : {ip}'.format(ip=kwargs['src_ip'])
-        if kwargs.has_key('mail') and kwargs['mail']:
+        if 'mail' in kwargs and kwargs['mail']:
             mail = kwargs['mail']
             additional_report += """
 Client Name : {client_name}
@@ -184,13 +185,13 @@ Attachments :
 
 Headers     :
 {headers}""".format(
-                recipients = ', '.join(mail['recipients']),
-                sender = mail['sender'],
-                client_ip= mail['helo']['client_ip'],
-                client_name = mail['helo']['client_name'],
-                links = ', '.join(mail['links']),
-                attachments = '\n\n'.join(mail['attachments']),
-                headers = '\n'.join(mail['headers']))
+                recipients=', '.join(mail['recipients']),
+                sender=mail['sender'],
+                client_ip=mail['helo']['client_ip'],
+                client_name=mail['helo']['client_name'],
+                links=', '.join(mail['links']),
+                attachments='\n\n'.join(mail['attachments']),
+                headers='\n'.join(mail['headers']))
 
         return additional_report
 
