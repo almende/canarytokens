@@ -1,4 +1,6 @@
 import base64
+import errno
+
 import simplejson
 import cgi
 
