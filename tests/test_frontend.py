@@ -9,6 +9,7 @@ dataPath = thisModule.filePath.parent().parent()
 os.environ["CANARY_WEB_IMAGE_UPLOAD_PATH"] = dataPath.child("tests").child("uploads").path
 os.environ["CANARY_WG_PRIVATE_KEY_SEED"] = "iti59nUKwKrE1jbM8scQ4TvQCLCvSXvnW5PO3g8DLLE\\\\\\="
 os.environ["CANARY_TEMPLATE_DIR"] = dataPath.child("templates").path
+os.environ["CANARY_TEST_REDIS"] = "True"
 
 from PIL import Image, ImageChops
 
@@ -25,7 +26,7 @@ settings.DOMAINS = ['localhost']
 import setup_db
 
 
-def _encodeForm(args):
+def encode_form(args):
     """
     Encodes two form values and a fake image file as multipart form encoding.
     """
@@ -108,9 +109,6 @@ class TestGeneratePage(TestCase):
     def test_generate_POST_web_image(self):
         request = DummyRequest([''])
 
-        import glob
-        print(glob.glob(""))
-
         for input_type in ["string", "bytes"]:
             args = copy.deepcopy(self.default_args)
             args['type'] = ["web_image"]
@@ -122,7 +120,7 @@ class TestGeneratePage(TestCase):
                 )
             ]
 
-            boundary, body = _encodeForm(args)
+            boundary, body = encode_form(args)
 
             if input_type == "bytes":
                 args = {k.encode('utf-8'): [v[0].encode('utf-8') if k != "web_image" else v] for k, v in args.items()}
