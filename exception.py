@@ -10,6 +10,9 @@ class NoCanarytokenPresent(Exception):
     def __init__(self, attribute=None):
         self.message = '{attribute} is unrecognized'.format(attribute=attribute)
 
+    def __str__(self,):
+        return 'No Canarytoken present'
+
 class NoCanarytokenFound(Exception):
     def __init__(self, haystack):
         self._haystack = haystack
