@@ -2,12 +2,12 @@ import tempfile
 import shutil
 import datetime
 import random
-from zipfile import ZipFile, ZipInfo
+from zipfile import ZipFile
 from ziplib import MODE_DIRECTORY
 
 import settings
 
-EXCEL_TEMPLATE=settings.CANARY_EXCEL_TEMPLATE
+EXCEL_TEMPLATE= settings.CANARY_EXCEL_TEMPLATE
 
 def zipinfo_contents_replace(zipfile=None, zipinfo=None, 
                              search=None, replace=None):

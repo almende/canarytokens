@@ -4,8 +4,6 @@ Base class for all canarydrop channels.
 
 import datetime
 
-import simplejson
-
 import settings
 from exception import DuplicateChannel
 from twisted.logger import Logger
@@ -37,11 +35,11 @@ class InputChannel(Channel):
     def format_additional_data(self, **kwargs):
         return ''
 
-    def format_webhook_canaryalert(self,canarydrop=None, protocol=settings.PROTOCOL,
+    def format_webhook_canaryalert(self, canarydrop=None, protocol=settings.PROTOCOL,
                                    host=settings.PUBLIC_DOMAIN, **kwargs):
         payload = {}
         if not host or host == '':
-            host=settings.PUBLIC_IP
+            host= settings.PUBLIC_IP
 
         payload['channel'] = self.name
         payload['time'] = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S (UTC)")
@@ -55,12 +53,12 @@ class InputChannel(Channel):
 
         return payload
 
-    def format_slack_canaryalert(self,canarydrop=None, protocol=settings.PROTOCOL,
-                                   host=settings.PUBLIC_DOMAIN, **kwargs):
+    def format_slack_canaryalert(self, canarydrop=None, protocol=settings.PROTOCOL,
+                                 host=settings.PUBLIC_DOMAIN, **kwargs):
         payload = {}
         fields = []
         if not host or host == '':
-            host=settings.PUBLIC_IP
+            host= settings.PUBLIC_IP
         manage_link = '{protocol}://{host}/manage?token={token}&auth={auth}'\
                       .format(protocol=protocol,
                               host=host,
@@ -84,7 +82,7 @@ class InputChannel(Channel):
                            host=settings.PUBLIC_DOMAIN, params=None, **kwargs):
         msg = {}
         if not host or host == '':
-            host=settings.PUBLIC_IP
+            host= settings.PUBLIC_IP
 
         if 'useragent' in kwargs:
             msg['useragent'] = kwargs['useragent']

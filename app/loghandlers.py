@@ -1,19 +1,15 @@
-from zope.interface import implementer, implements
 from twisted.logger import ILogObserver
 from twisted.logger import LogLevel
 import json
-import urllib
 
 from twisted.logger import Logger
 log = Logger()
 import settings
 
-from twisted.web.iweb import IBodyProducer
 from twisted.internet import defer
 from twisted.web.client import Agent
 from twisted.web.http_headers import Headers
 from twisted.internet import reactor
-from twisted.internet import protocol
 from zope.interface import implementer
 
 from twisted.internet.defer import succeed

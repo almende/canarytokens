@@ -6,10 +6,10 @@ import cgi
 
 from twisted.web import server, resource
 from twisted.application import internet
-from twisted.web.server import Site, GzipEncoderFactory
+from twisted.web.server import GzipEncoderFactory
 import twisted.web.resource
 from twisted.web.resource import Resource, EncodingResourceWrapper, \
-    ForbiddenResource, NoResource
+    NoResource
 
 from twisted.web.static import File, DirectoryLister, Data
 
@@ -19,13 +19,10 @@ from twisted.logger import Logger
 log = Logger()
 
 from jinja2 import Environment, FileSystemLoader
-import pyqrcode
 
 from tokens import Canarytoken
 from canarydrop import Canarydrop
-from queries import save_canarydrop, save_imgur_token, get_canarydrop, \
-    create_linkedin_account, create_bitcoin_account, \
-    get_linkedin_account, get_bitcoin_account, \
+from queries import save_canarydrop, get_canarydrop, \
     save_clonedsite_token, get_all_canary_sites, get_canary_google_api_key, \
     is_webhook_valid, get_aws_keys, get_all_canary_domains
 
@@ -39,7 +36,6 @@ from mysql import make_canary_mysql_dump
 from authenticode import make_canary_authenticode_binary
 import settings
 import datetime
-import tempfile
 import hashlib
 import os
 import csv

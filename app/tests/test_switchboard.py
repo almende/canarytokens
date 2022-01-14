@@ -1,25 +1,22 @@
 import tests.config
+import setup_db
 from twisted.trial.unittest import TestCase
 from twisted.web.test.test_web import DummyRequest
 import json
 
 from switchboard import Switchboard
-
 import settings
 from channel_http import CanarytokenPage, ChannelHTTP
 from httpd_site import GeneratorPage
 from twisted.python import log as l
 from queries import get_canarydrop
 
-# from tests import test_frontend
-
 settings.DOMAINS = ['localhost']
-
-import setup_db
 
 switchboard = Switchboard()
 canarytokens_httpd = ChannelHTTP(port=settings.CHANNEL_HTTP_PORT,
-                                switchboard=switchboard)
+                                 switchboard=switchboard)
+
 
 class TestTriggerWebBug(TestCase):
     default_args = {
@@ -88,4 +85,3 @@ class TestTriggerWebBug(TestCase):
         assert len(triggered_list) == 1
         assert list(triggered_list.values())[0]['input_channel'] == 'HTTP'
         assert canarydrop_before == canarydrop_after
-

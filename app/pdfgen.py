@@ -4,8 +4,8 @@ import random
 
 import settings
 
-PDF_FILE=settings.CANARY_PDF_TEMPLATE
-STREAM_OFFSET=settings.CANARY_PDF_TEMPLATE_OFFSET
+PDF_FILE= settings.CANARY_PDF_TEMPLATE
+STREAM_OFFSET= settings.CANARY_PDF_TEMPLATE_OFFSET
 
 def _substitute_stream(header=None, stream=None, search='abcdefghijklmnopqrstuvwxyz.zyxwvutsrqponmlkjihgfedcba.aceegikmoqsuwy.bdfhjlnprtvxz', replace=None):
     #Ohhhh, this is nasty. Instead of trying to get the xref positions right,

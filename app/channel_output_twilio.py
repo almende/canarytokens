@@ -1,7 +1,6 @@
 """
 Output channel that sends SMSs. Relies on Twilio to actually send SMSs.
 """
-import settings
 import pprint
 
 from twisted.logger import Logger

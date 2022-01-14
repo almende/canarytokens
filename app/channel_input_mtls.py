@@ -1,6 +1,6 @@
 from OpenSSL.crypto import FILETYPE_PEM, PKey, TYPE_RSA, X509, X509Extension, dump_certificate, dump_privatekey, load_certificate, load_privatekey
 from twisted.internet.ssl import PrivateCertificate, Certificate
-from twisted.internet import reactor, defer
+from twisted.internet import defer
 from twisted.internet.protocol import Factory
 from twisted.logger import Logger
 from twisted.protocols import basic
@@ -10,7 +10,6 @@ from twisted.application.internet import SSLServer
 from time import time
 from math import ceil
 
-from channel import InputChannel
 from constants import INPUT_CHANNEL_MTLS
 
 import json
