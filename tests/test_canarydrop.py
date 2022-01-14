@@ -1,4 +1,4 @@
-import pytest
+import tests.config
 from canarydrop import Canarydrop
 # from redismanager import db
 import settings

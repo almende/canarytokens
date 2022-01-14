@@ -1,3 +1,4 @@
+import tests.config
 from twisted.trial.unittest import TestCase
 import json, re, io, os, copy
 

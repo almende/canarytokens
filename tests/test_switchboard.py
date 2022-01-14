@@ -1,20 +1,9 @@
+import tests.config
 from twisted.trial.unittest import TestCase
 from twisted.web.test.test_web import DummyRequest
-from twisted.python.modules import getModule
-import os
 import json
-import datetime
-import re
 
 from switchboard import Switchboard
-
-thisModule = getModule(__name__)
-dataPath = thisModule.filePath.parent().parent()
-
-os.environ["CANARY_WEB_IMAGE_UPLOAD_PATH"] = dataPath.child("tests").child("uploads").path
-os.environ["CANARY_WG_PRIVATE_KEY_SEED"] = "iti59nUKwKrE1jbM8scQ4TvQCLCvSXvnW5PO3g8DLLE\\\\\\="
-os.environ["CANARY_TEMPLATE_DIR"] = dataPath.child("templates").path
-os.environ["CANARY_TEST_REDIS"] = "True"
 
 import settings
 from channel_http import CanarytokenPage, ChannelHTTP
@@ -50,7 +39,7 @@ class TestTriggerWebBug(TestCase):
     def __init__(self, methodName="runTest"):
         super().__init__(methodName)
 
-        observer = l.PythonLoggingObserver()
+        self.observer = l.PythonLoggingObserver()
 
     def test_trigger_GET_no_valid_token(self):
         request = DummyRequest([''])
