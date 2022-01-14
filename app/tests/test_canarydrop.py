@@ -1,14 +1,14 @@
 import tests.config
+from twisted.trial.unittest import TestCase
 from canarydrop import Canarydrop
-# from redismanager import db
 import settings
 import re
 
 settings.DOMAINS = ['localhost']
-import setup_db
 
-class TestGenerateCanaryToken:
-    def test_make_canarytoken_with_email(self, monkeypatch):
+
+class TestGenerateCanaryToken(TestCase):
+    def test_make_canarytoken_with_email(self):
         token_type = 'web'
         alert_email_enabled = True
         email = 'a@b.com'
@@ -37,7 +37,7 @@ class TestGenerateCanaryToken:
         assert canarydrop._drop['memo'] == memo
         assert canarydrop._drop['browser_scanner_enabled'] == browser_scanner
 
-    def test_make_canarytoken_with_email_and_webhook(self, monkeypatch):
+    def test_make_canarytoken_with_email_and_webhook(self):
         token_type = 'web'
         alert_email_enabled = True
         email = 'a@b.com'
@@ -66,7 +66,7 @@ class TestGenerateCanaryToken:
         assert canarydrop._drop['memo'] == memo
         assert canarydrop._drop['browser_scanner_enabled'] == browser_scanner
 
-    def test_make_canarytoken_with_webhook(self, monkeypatch):
+    def test_make_canarytoken_with_webhook(self):
         token_type = 'web'
         alert_email_enabled = False
         email = ''

@@ -1,20 +1,10 @@
 import tests.config
 from twisted.trial.unittest import TestCase
-import json, re, io, os, copy
-
-from twisted.python.modules import getModule
-
-thisModule = getModule(__name__)
-dataPath = thisModule.filePath.parent().parent()
-
-os.environ["CANARY_WEB_IMAGE_UPLOAD_PATH"] = dataPath.child("tests").child("uploads").path
-os.environ["CANARY_WG_PRIVATE_KEY_SEED"] = "iti59nUKwKrE1jbM8scQ4TvQCLCvSXvnW5PO3g8DLLE\\\\\\="
-os.environ["CANARY_TEMPLATE_DIR"] = dataPath.child("templates").path
-os.environ["CANARY_TEST_REDIS"] = "True"
+import json, re, io,  copy
 
 from PIL import Image, ImageChops
 
-from httpd_site import ManagePage, GeneratorPage
+from httpd_site import GeneratorPage
 from twisted.web.test.test_web import DummyRequest
 from twisted.web.http_headers import Headers
 
@@ -24,7 +14,6 @@ import random
 from queries import get_canarydrop
 
 settings.DOMAINS = ['localhost']
-import setup_db
 
 
 def encode_form(args):
@@ -100,7 +89,8 @@ class TestGeneratePage(TestCase):
         request = DummyRequest([''])
 
         for input_type, args in [("string", copy.deepcopy(self.default_args)), (
-                "bytes", {k.encode('utf-8'): [v[0].encode('utf-8')] for k, v in copy.deepcopy(self.default_args).items()})]:
+                "bytes",
+                {k.encode('utf-8'): [v[0].encode('utf-8')] for k, v in copy.deepcopy(self.default_args).items()})]:
             with self.subTest(input_type=input_type):
                 request.args = args
                 request.method = 'POST'
@@ -116,7 +106,7 @@ class TestGeneratePage(TestCase):
             args['web_image'] = [
                 (
                     'web_image_test.png',
-                    dataPath.child("tests").child("web_image_test.png").open('rb'),
+                    tests.config.dataPath.child("tests").child("web_image_test.png").open('rb'),
                     'image/png'
                 )
             ]
@@ -140,7 +130,7 @@ class TestGeneratePage(TestCase):
                 canarydrop = get_canarydrop(json.loads(result)['Token'])
 
                 assert ImageChops.difference(
-                    Image.open(dataPath.child("tests").child("web_image_test.png").path),
+                    Image.open(tests.config.dataPath.child("tests").child("web_image_test.png").path),
                     Image.open(canarydrop['web_image_path'])
                 ).getbbox() is None
 
