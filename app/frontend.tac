@@ -11,6 +11,8 @@ from twisted.logger import ILogObserver, textFileLogObserver
 from twisted.python import logfile
 import settings
 
+import setup_db
+
 logging.basicConfig()
 logger = logging.getLogger('generator_httpd')
 logger.setLevel(logging.DEBUG)
