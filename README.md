@@ -2,13 +2,25 @@
 
 Canarytokens
 =============
-by Thinkst Applied Research
+by Thinkst Applied Research (adapted by Almende BV)
 
 Overview
 --------
 Canarytokens helps track activity and actions on your network.
 
 If you have any issues please check out our FAQ over [here](https://github.com/thinkst/canarytokens/wiki#), or create an issue and we'll try to get back to you as soon as possible.
+
+Running locally
+---------------
+To run locally, you will need either a running Redis database, or you can fake a clean/empty test Redis by including `CANARY_TEST_REDIS=True` as an environment variable.
+
+You must be in the `app` directory to run the `frontend` and `switchboard` services.
+
+The command to run the `frontend` service is:
+
+`CANARY_WEB_IMAGE_UPLOAD_PATH=<Path to directory where images will be uploaded> CANARY_WG_PRIVATE_KEY_SEED=<See notes below for how to generate this> CANARY_TEMPLATE_DIR=templates LOG_FILE=- CANARY_DOMAINS=localhost twistd -noy frontend.tac`
+
+
 
 Deprecations
 ------------
