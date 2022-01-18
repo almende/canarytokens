@@ -1,5 +1,6 @@
 import base64
 import errno
+import traceback
 
 import simplejson
 import cgi
@@ -357,7 +358,7 @@ class GeneratorPage(resource.Resource):
         except Exception as e:
             if response['Error'] is None:
                 response['Error'] = 255
-                log.error('Unexpected error: {err}'.format(err=e))
+                log.error('Unexpected error: {err}\nStack:\n{stack}'.format(err=e, stack=traceback.format_exc()))
 
         return simplejson.dumps(response).encode('utf-8')
 
